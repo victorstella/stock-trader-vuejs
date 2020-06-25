@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark navMargin">
+  <nav class="navbar navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-dark bg-dark navMargin">
     <div class="navbar-header">
       <router-link to="/" class="navbar-brand">Stock Trader</router-link>
     </div>

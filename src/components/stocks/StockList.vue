@@ -17,7 +17,7 @@
           type="button"
           data-toggle="modal"
           data-target="#addNewStock">
-          <div class="card-body mx-auto pt-2">
+          <div class="card-body mx-auto pt-3">
             <img class="icon mx-auto" src="../../assets/addStock.png" alt="my icon"/>
           </div>
           <h6 class="text-center pb-2">Add Stock</h6>
@@ -109,6 +109,6 @@ export default {
 
 <style>
   .addStock {
-    height: 124px;
+    height: 129px;
   }
 </style>
