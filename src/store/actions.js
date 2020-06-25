@@ -23,27 +23,24 @@ const signup = ({commit, dispatch}, authData) => {
       localId: firstResponse.data.localId,
       userEmail: authData.email
     });
-    
-    const now = new Date();
-    const expirationDate = new Date(now.getTime() + firstResponse.data.expiresIn * 1000);
-    localStorage.setItem('userEmail', authData.email);
-    localStorage.setItem('userPwrd', authData.pwrd);
-    localStorage.setItem('expirationDate', expirationDate);
     dispatch('storeUser', authData);
-    dispatch('logoutTimer', firstResponse.data.expiresIn);
     
     axios.get('https://vuejs-http-d192f.firebaseio.com/stocks.json?auth=' + firstResponse.data.idToken)
     .then(secondResponse => {
       commit('SET_STOCKS', secondResponse.data);
     })
     .catch(error => console.log(error));
+    
+    const now = new Date();
+    const expirationDate = new Date(now.getTime() + firstResponse.data.expiresIn * 1000);
+    localStorage.setItem('expirationDate', expirationDate);
+    localStorage.setItem('userEmail', authData.email);
+    localStorage.setItem('userPwrd', authData.pwrd);
+    dispatch('logoutTimer', firstResponse.data.expiresIn);
 
+    router.push({ name: 'stocks' });
   })
-  .catch(error => {
-    if(JSON.stringify(error.firstResponse.data.error.message) == '"EMAIL_EXISTS"') {
-      alert('The email address is already in use by another account.');
-    };
-  });
+  .catch(error => alert(error));
 };
 
 const deleteAccount = ({commit, getters}) => {
@@ -90,16 +87,10 @@ const login = ({commit, dispatch}, authData) => {
       localId: firstResponse.data.localId,
       userEmail: authData.email
     });
-
-    const now = new Date();
-    const expirationDate = new Date(now.getTime() + firstResponse.data.expiresIn * 1000);
-    localStorage.setItem('userEmail', authData.email);
-    localStorage.setItem('userPwrd', authData.pwrd);
-    localStorage.setItem('expirationDate', expirationDate);
     
     axios.get('https://vuejs-http-d192f.firebaseio.com/users.json?auth=' + firstResponse.data.idToken)
     .then(secondResponse => {
-      dispatch('logoutTimer', firstResponse.data.expiresIn);
+      
       for(let user in secondResponse.data) {
         if(secondResponse.data[user].email == authData.email) {
           
@@ -118,16 +109,17 @@ const login = ({commit, dispatch}, authData) => {
         
         }
       };
+
+      const now = new Date();
+      const expirationDate = new Date(now.getTime() + firstResponse.data.expiresIn * 1000);
+      localStorage.setItem('expirationDate', expirationDate);
+      localStorage.setItem('userEmail', authData.email);
+      localStorage.setItem('userPwrd', authData.pwrd);
+      dispatch('logoutTimer', firstResponse.data.expiresIn);
+
       router.push({ name: 'stocks' });
     })
-    .catch(error => {
-      if(JSON.stringify(error.secondResponse.data.error.message) == '"INVALID_PASSWORD"') {
-        alert('The password is invalid.');
-      };      
-      if(JSON.stringify(error.secondResponse.data.error.message) == '"EMAIL_NOT_FOUND"') {
-        alert('There is no user record corresponding to this email account.');
-      };
-    });
+    .catch(error => alert(error));
 
   })
   .catch(error => console.log(error));

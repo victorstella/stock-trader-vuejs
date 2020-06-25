@@ -77,6 +77,9 @@ const LOGOUT = (state) => {
   state.userServerData = null;
   state.stocks = [];
   state.myPortfolio = [];
+  localStorage.removeItem('expirationDate');
+  localStorage.removeItem('userEmail');
+  localStorage.removeItem('userPwrd');
 };
 
 const STORE_USER_INFO = (state, userInfo) => {

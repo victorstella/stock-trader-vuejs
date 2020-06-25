@@ -1,13 +1,16 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-dark bg-dark navMargin">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark navMargin">
+    
     <div class="navbar-header">
       <router-link to="/" class="navbar-brand">Stock Trader</router-link>
     </div>
     <div class="collapse navbar-collapse">
+      
       <ul v-if="loggedUser" class="navbar-nav mr-auto">
         <router-link to="/portfolio" class="nav-link" activeClass="active"><a>Portfolio</a></router-link>
         <router-link to="/stocks" class="nav-link" activeClass="active"><a>Stocks</a></router-link>
       </ul>
+      
       <ul v-if="loggedUser" class="navbar-nav d-flex justify-content-end">
         <li class="nav-item" @click="endDay()"><a class="nav-link" href="#">End Day</a></li>
         <li class="nav-item dropdown">
@@ -25,14 +28,17 @@
           </div>
         </li>
       </ul>
+
       <strong
         v-if="loggedUser"
         class="navbar-text" 
       >Funds: {{ displayFunds }}</strong>
+
       <ul v-if="!loggedUser" class="navbar-nav ml-auto">
         <router-link to="/signup" class="nav-link" activeClass="active"><a>Sign Up</a></router-link>
         <router-link to="/login" class="nav-link" activeClass="active"><a>Login</a></router-link>
       </ul>
+
       <ul v-if="loggedUser" class="navbar-nav d-flex justify-content-end">
         <li v-if="loggedUser" class="nav-item dropdown">
           <a
@@ -49,6 +55,7 @@
           </div>
         </li>
       </ul>
+
     </div>
   </nav>
 </template>
