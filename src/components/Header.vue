@@ -72,7 +72,6 @@ export default {
     ...mapActions({
       loadServerData: 'loadStockServer',
       sendServerData: 'sendStockServer',
-      logoutUser: 'logoutUser'
     }),
     endDay() {
       this.$store.commit('RANDOM_STOCKS');

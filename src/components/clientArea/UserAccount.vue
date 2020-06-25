@@ -119,7 +119,9 @@ export default {
   },
   computed: {
     userData(){
-      return this.$store.getters.getUserServerData;
+      if(this.$store.getters.getUserServerData) {
+        return this.$store.getters.getUserServerData;
+      }
     }
   },
   methods: {
