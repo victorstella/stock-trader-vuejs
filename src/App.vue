@@ -3,7 +3,7 @@
 
     <app-header></app-header>
     <div class="row m-0">
-      <div class="col-md-12 p-0">    
+      <div id="routerView" class="col-md-11 px-0 pb-2">    
         <transition name="slide" mode="out-in">
           <router-view id="body"></router-view>
         </transition>
@@ -27,9 +27,11 @@ export default {
 </script>
 
 <style>
-  #body {
-    margin-left: 100px;
-    margin-right: 100px;
+  @media only screen and (min-width: 992px){
+    div.col-md-11 {
+      margin-left: 4%;
+      margin-right: 5%;
+    }
   }
 
   .slide-enter-active {

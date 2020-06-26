@@ -1,8 +1,8 @@
 <template>
-  <div class="card" style="background-color: lightgrey;">
+  <div class="card mx-3 mx-lg-5" style="background-color: lightgrey;">
     <label for="StockList"><h3 class="card-header px-4">Stock List</h3></label>
-    <div class="row p-4">
-      
+    <div class="row px-4 pt-3 pb-4 pb-lg-0">
+
       <app-stock-list 
         v-for="company in stockListCompanies" 
         :key="company.id" 
@@ -25,40 +25,51 @@
       </div>
 
       <div 
-        class="modal fade" 
+        class="modal fade col-12" 
         id="addNewStock" 
         tabindex="-1" 
         role="dialog" 
         aria-labelledby="addNewStock" 
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h6 class="modal-title"><strong>New Stock</strong></h6>
+          
+          <div class="modal-content col-11 mx-auto">  
+            <div class="modal-header py-2">
+              <h6 class="modal-title mx-2"><strong>New Stock</strong></h6>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
-            </div>
-            <div class="modal-body">
-              <p>
-                <label for="newStockName">Stock Name</label>
-                <input class="form-control col-6" type="text" placeholder="Name" v-model="newStockName">
-              </p>
-              <p>
-                <label for="newStockPrice">Stock Price</label>
-                <input class="form-control col-4" type="number" placeholder="Price" v-model="newStockPrice">
-              </p>
-            </div>
-            <div class="modal-footer">
+            </div>    
+            <div class="modal-body py-2 mx-2">  
+              <label for="newStockName">Stock Name</label>
+              <input class="form-control col-lg-7 col-9" type="text" placeholder="Name" v-model="newStockName">
+              <br>
+              <label for="newStockPrice">Stock Price</label>
+              <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">$</span>
+                </div>
+                <input 
+                  type="number" 
+                  class="form-control col-lg-5 col-6" 
+                  aria-label="Amount (to the nearest dollar)"
+                  v-model="newStockPrice">
+                <div class="input-group-append">
+                  <span class="input-group-text">.00</span>
+                </div>
+              </div>
+            </div>   
+            <div class="modal-footer py-2">
               <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
               <button 
                 type="button" 
-                class="btn btn-success" 
+                class="btn btn-success mx-2" 
                 data-dismiss="modal" 
                 @click.prevent="addNewStock()">Save
               </button>
-            </div>
+            </div> 
           </div>
+        
         </div>
       </div>
 

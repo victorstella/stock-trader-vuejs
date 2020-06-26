@@ -38,7 +38,7 @@ const signup = ({commit, dispatch}, authData) => {
     localStorage.setItem('userPwrd', authData.pwrd);
     dispatch('logoutTimer', firstResponse.data.expiresIn);
 
-    router.push({ name: 'stocks' });
+    router.replace({ name: 'stocks' });
   })
   .catch(error => alert(error));
 };
@@ -117,7 +117,7 @@ const login = ({commit, dispatch}, authData) => {
       localStorage.setItem('userPwrd', authData.pwrd);
       dispatch('logoutTimer', firstResponse.data.expiresIn);
 
-      router.push({ name: 'stocks' });
+      router.go(-1);
     })
     .catch(error => alert(error));
 
@@ -128,7 +128,7 @@ const login = ({commit, dispatch}, authData) => {
 const logoutTimer = ({commit}, expirationTime) => {
   setTimeout(() => {
     commit('LOGOUT');
-    router.push({ name: 'login' });
+    router.replace({ name: 'login' });
   }, expirationTime * 1000);
 };
 

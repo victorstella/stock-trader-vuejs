@@ -1,24 +1,27 @@
 <template>
   <div class="col-sm-6 col-md-4">
+    
     <div class="card bg-dark text-white mb-4">
-      <h6 class="card-header">{{ stock.name }} <small>Price: {{ numberToMoney }}</small>
-      <br>
-      <small>Quantity: {{ stock.quantity }}</small></h6>
+      <h6 class="card-header">{{ stock.name }} 
+        <small>Price: {{ numberToMoney }}</small>
+        <br>
+        <small>Quantity: {{ stock.quantity }}</small>
+      </h6>
       <div class="card-body row">
         <input
           type="number"
           class="form-control col-4 m-auto"
           placeholder="Lots"
           v-model="quantity"
-          :class="{danger: insufficientQuantity}"
-        >
+          :class="{danger: insufficientQuantity}">
         <button
           class="btn btn-danger col-7 m-auto"
           @click="sellStock"
-          :disabled="insufficientQuantity"
-        >{{ insufficientQuantity ? 'Insufficient Stocks' : 'Sell' }}</button>
+          :disabled="insufficientQuantity">{{ insufficientQuantity ? 'Insufficient Stocks' : 'Sell' }}
+        </button>
       </div>
     </div>
+  
   </div>
 </template>
 

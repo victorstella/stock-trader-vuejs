@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark navMargin">
+  <nav id="myNav" class="navbar navbar-expand-lg navbar-dark bg-dark navMargin">
     
     <div class="navbar-header">
       <router-link to="/" class="navbar-brand">Stock Trader</router-link>
@@ -20,8 +20,8 @@
             data-toggle="dropdown"
             role="button"
             aria-haspopup="true"
-            aria-expanded="false"
-          >Save & Load<span class="caret"></span> </a>
+            aria-expanded="false">Save & Load<span class="caret"></span>
+          </a>
           <div class="dropdown-menu dropdown-menu-right">
             <a class="dropdown-item" href="#" @click="saveData()">Save Data</a>
             <a class="dropdown-item" href="#" @click="loadData()">Load Data</a>
@@ -31,8 +31,8 @@
 
       <strong
         v-if="loggedUser"
-        class="navbar-text" 
-      >Funds: {{ displayFunds }}</strong>
+        class="navbar-text">Funds: {{ displayFunds }}
+      </strong>
 
       <ul v-if="!loggedUser" class="navbar-nav ml-auto">
         <router-link to="/signup" class="nav-link" activeClass="active"><a>Sign Up</a></router-link>
@@ -47,8 +47,8 @@
             data-toggle="dropdown"
             role="button"
             aria-haspopup="true"
-            aria-expanded="false"
-          >{{ loggedUser }}<span class="caret"></span></a>
+            aria-expanded="false">{{ loggedUser }}<span class="caret"></span>
+          </a>
           <div class="dropdown-menu dropdown-menu-right">
             <router-link to="/userAccount" class="dropdown-item"><a>Account</a></router-link>
             <router-link to="/login" class="dropdown-item"><a @click="logout()">Logout</a></router-link>
@@ -104,4 +104,5 @@ export default {
   .dropdown-menu {
     min-width: 0px;
   }
+
 </style>

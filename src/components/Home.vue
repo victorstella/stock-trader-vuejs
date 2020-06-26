@@ -1,5 +1,5 @@
 <template>
-  <div id="home" class="jumbotron p-4" style="background-color: lightgrey;">
+  <div id="home" class="jumbotron p-4 mx-lg-5 mx-3" style="background-color: lightgrey;">
     
     <h1 class="text-center">Sign Up or Login to trade and build your portfolio.</h1>
     <br>

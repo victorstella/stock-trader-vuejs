@@ -23,34 +23,36 @@
     </div>
 
     <div 
-      class="modal fade" 
+      class="modal fade col-12" 
       id="deleteStock" 
       tabindex="-1" 
       role="dialog" 
       aria-labelledby="deleteStock" 
       aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h6 class="modal-title"><strong>Delete Stock</strong></h6>
+        
+        <div class="modal-content col-11 mx-auto">
+          <div class="modal-header py-2">
+            <h6 class="modal-title mx-2"><strong>Delete Stock</strong></h6>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body mx-2 pb-0">
             <p>Do you really want to delete this stock?</p>
             <p>Click on "Save" to apply your modifications and the current state.</p>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+          <div class="modal-footer py-2">
+            <button type="button" class="btn btn-danger mx-auto" data-dismiss="modal">No</button>
             <button 
               type="button" 
-              class="btn btn-success" 
+              class="btn btn-success mx-auto" 
               data-dismiss="modal" 
               @click.prevent="deleteStock()">Yes
             </button>
           </div>
         </div>
+      
       </div>
     </div>
 
