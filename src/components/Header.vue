@@ -43,7 +43,7 @@
         <li v-if="loggedUser" class="nav-item dropdown">
           <a
             href="#"
-            class="nav-lidropdownnk dropdown-toggle"
+            class="nav-lidropdownnk dropdown-toggle nav-link"
             data-toggle="dropdown"
             role="button"
             aria-haspopup="true"
@@ -63,59 +63,54 @@
         v-if="loggedUser && smallScreen"
         class="navbar-text">Funds: {{ displayFunds }}
       </strong>
-      
+
       <button
         v-if="loggedUser && smallScreen"
         class="navbar-toggler"
-        type="button" 
-        data-toggle="collapse" 
-        data-target="#responsiveMenuToggle" 
-        aria-controls="responsiveMenuToggle" 
+        type="button"
+        data-toggle="collapse"
+        data-target="#responsiveMenuToggle"
+        aria-controls="responsiveMenuToggle"
         aria-expanded="false" 
         aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      
-      <div v-if="!loggedUser" class="navbar-nav navbar-expand ml-auto">
-        <router-link to="/signup" class="nav-link mx-3" activeClass="active"><a>Sign Up</a></router-link>
-        <router-link to="/login" class="nav-link" activeClass="active"><a>Login</a></router-link>
+
+      <div v-if="!loggedUser && smallScreen" class="navbar-nav navbar-expand ml-auto">
+        <router-link to="/signup" class="nav-link mr-2" activeClass="active"><a>Sign Up</a></router-link>
+        <router-link to="/login" class="nav-link ml-2" activeClass="active"><a>Login</a></router-link>
       </div>
-
     </div>
-    
-    <div>
-      <div class="collapse" id="responsiveMenuToggle">
-        <div class="bg-dark px-3">
 
-          <ul v-if="loggedUser" class="navbar-nav mr-auto">
-            <router-link to="/portfolio" class="nav-link" activeClass="active"><a>Portfolio</a></router-link>
-            <router-link to="/stocks" class="nav-link" activeClass="active"><a>Stocks</a></router-link>
-          </ul>
-          
-          <ul v-if="loggedUser" class="navbar-nav d-flex">
-            <li class="nav-item" @click="endDay()"><a class="nav-link" href="#">End Day</a></li>
-            <li class="nav-item" @click="saveData()"><a class="nav-link" href="#">Save Data</a></li>
-            <li class="nav-item" @click="loadData()"><a class="nav-link" href="#">Load Data</a></li>
-            <li v-if="loggedUser" class="nav-item dropdown">
-              <a
-                href="#"
-                class="nav-lidropdownnk dropdown-toggle nav-link"
-                data-toggle="dropdown"
-                role="button"
-                aria-haspopup="true"
-                aria-expanded="false">{{ loggedUser }}<span class="caret"></span>
-              </a>
-              <div class="collapse bg-dark">
-                <router-link to="/userAccount" class="dropdown-item text-light"><a>Account</a></router-link>
-                <router-link to="/login" class="dropdown-item text-light"><a @click="logout()">Logout</a></router-link>
-              </div>
-            </li>
-          </ul>
-          
-          
+    <div class="collapse" v-if="loggedUser && smallScreen" id="responsiveMenuToggle">
+      <div class="bg-dark px-3">
 
-        </div>
-      </div>   
+        <ul class="navbar-nav mr-auto">
+          <router-link to="/portfolio" class="nav-link" activeClass="active"><a>Portfolio</a></router-link>
+          <router-link to="/stocks" class="nav-link" activeClass="active"><a>Stocks</a></router-link>
+        </ul>
+
+        <ul class="navbar-nav d-flex">
+          <li class="nav-item" @click="endDay()"><a class="nav-link" href="#">End Day</a></li>
+          <li class="nav-item" @click="saveData()"><a class="nav-link" href="#">Save Data</a></li>
+          <li class="nav-item" @click="loadData()"><a class="nav-link" href="#">Load Data</a></li>
+          <li class="nav-item dropdown">
+            <a
+              href="#"
+              class="nav-lidropdownnk dropdown-toggle nav-link"
+              data-toggle="dropdown"
+              role="button"
+              aria-haspopup="true"
+              aria-expanded="false">{{ loggedUser }}<span class="caret"></span>
+            </a>
+            <div class="collapse dropdown-menu bg-dark">
+              <router-link to="/userAccount" class="dropdown-item text-light"><a>Account</a></router-link>
+              <router-link to="/login" class="dropdown-item text-light"><a @click="logout()">Logout</a></router-link>
+            </div>
+          </li>
+        </ul>
+
+      </div>
     </div>
 
   </nav>
