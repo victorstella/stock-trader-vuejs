@@ -1,4 +1,3 @@
-import axiosAuth from '../axios-auth-api.js';
 import axios from 'axios';
 import router from '../routes.js'
 
@@ -12,7 +11,8 @@ const sellStock = ({commit}, order) => {
 
 const signup = ({commit, dispatch}, authData) => {
   
-  axiosAuth.post('/signupNewUser?key=AIzaSyADgubmeI4xoGzlA0ZNBoHYl8KTB36bcZg', {
+  axios.post('https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?' +
+    'key=AIzaSyADgubmeI4xoGzlA0ZNBoHYl8KTB36bcZg', {
     email: authData.email,
     password: authData.pwrd,
     returnSecureToken: true
@@ -44,8 +44,8 @@ const signup = ({commit, dispatch}, authData) => {
 };
 
 const deleteAccount = ({commit, getters}) => {
-  axios.post('https://identitytoolkit.googleapis.com/v1/accounts:delete?key=AIzaSyADgubmeI4xoGzlA0ZNBoHYl8KTB36bcZg',
-    { idToken: getters.getIdToken })
+  axios.post('https://identitytoolkit.googleapis.com/v1/accounts:delete?' +
+    'key=AIzaSyADgubmeI4xoGzlA0ZNBoHYl8KTB36bcZg', { idToken: getters.getIdToken })
   .catch(error => console.log(error));
   
   axios.delete('https://vuejs-http-d192f.firebaseio.com/users/' + getters.getUserServerData.userServerId + 
@@ -76,7 +76,8 @@ const tryAutoLogin = ({dispatch}) => {
 };
 
 const login = ({commit, dispatch}, authData) => {
-  axiosAuth.post('/verifyPassword?key=AIzaSyADgubmeI4xoGzlA0ZNBoHYl8KTB36bcZg', {
+  axios.post('https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?' +
+    'key=AIzaSyADgubmeI4xoGzlA0ZNBoHYl8KTB36bcZg', {
     email: authData.email,
     password: authData.pwrd,
     returnSecureToken: true
@@ -160,12 +161,13 @@ const storeUserAccountModifications = ({getters, commit}, userModData) => {
   userData.usrDoc = userModData.usrDoc;
   userData.email = userModData.email;
   
-  axios.patch('https://vuejs-http-d192f.firebaseio.com/users/' + getters.getUserServerData.userServerId + '.json?auth=' +
-    getters.getIdToken, userData)
+  axios.patch('https://vuejs-http-d192f.firebaseio.com/users/' + getters.getUserServerData.userServerId + 
+    '.json?auth=' + getters.getIdToken, userData)
   .catch(error => console.log(error));
   if(emailChanged) {
     
-    axios.post('https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyADgubmeI4xoGzlA0ZNBoHYl8KTB36bcZg', {
+    axios.post('https://identitytoolkit.googleapis.com/v1/accounts:update?' +
+      'key=AIzaSyADgubmeI4xoGzlA0ZNBoHYl8KTB36bcZg', {
       idToken: getters.getIdToken,
       email: userData.email,
       returnSecureToken: true
@@ -184,8 +186,8 @@ const storeUserAccountModifications = ({getters, commit}, userModData) => {
 };
 
 const loadStockServer = ({commit, getters}) => {
-  axios.get('https://vuejs-http-d192f.firebaseio.com/users/' + getters.getUserServerData.userServerId + '.json?auth=' + 
-    getters.getIdToken)
+  axios.get('https://vuejs-http-d192f.firebaseio.com/users/' + getters.getUserServerData.userServerId + 
+    '.json?auth=' + getters.getIdToken)
   .then(response => {
     commit('SET_PORTFOLIO', response.data.lastSavedData);
   })
@@ -208,7 +210,8 @@ const sendStockServer = ({getters}) => {
     '.json?auth=' + getters.getIdToken, { lastSavedData: lastSavedData })
   .catch(error => console.log(error));
   
-  axios.patch('https://vuejs-http-d192f.firebaseio.com/.json?auth=' + getters.getIdToken, { stocks: getters.getStocks })
+  axios.patch('https://vuejs-http-d192f.firebaseio.com/.json?auth=' + getters.getIdToken, 
+    { stocks: getters.getStocks })
   .catch(error => console.log(error));
 };
 

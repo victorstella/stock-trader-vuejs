@@ -103,7 +103,7 @@
               aria-haspopup="true"
               aria-expanded="false">{{ loggedUser }}<span class="caret"></span>
             </a>
-            <div class="collapse dropdown-menu bg-dark">
+            <div class="collapse dropdown-menu bg-secondary">
               <router-link to="/userAccount" class="dropdown-item text-light"><a>Account</a></router-link>
               <router-link to="/login" class="dropdown-item text-light"><a @click="logout()">Logout</a></router-link>
             </div>
