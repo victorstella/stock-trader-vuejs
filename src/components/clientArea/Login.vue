@@ -5,26 +5,36 @@
       <h3 class="card-header">Login</h3>
       <div class="card-body">
         <form>
+          
           <label for="Email">Email Address</label>
           <input 
             type="email" 
             class="form-control col-lg-9 m-auto"
+            :class="{invalidField: $v.email.$error}"
             placeholder="user@example.com"
+            @blur="$v.email.$touch()"
             v-model="email"
             autofocus>
+          <small style="color: red" v-if="$v.email.$error">Please provide a valid e-mail address.</small>
           <br>
+          <br>
+          
           <label for="Password">Password</label>
           <input 
             type="password" 
             class="form-control col-lg-9 m-auto"
+            :class="{invalidField: $v.pwrd.$error}"
+            @blur="$v.pwrd.$touch()"
             v-model="pwrd">
           <br>
+          
           <button 
             type="submit" 
             class="btn btn-info" 
             @click.prevent="signin()"
-            :disabled="!email">Enter
+            :disabled="$v.$invalid">Enter
           </button>
+        
         </form>
       </div>
     </div>
@@ -33,11 +43,23 @@
 </template>
 
 <script>
+import { required, email, minLength } from 'vuelidate/lib/validators';
+
 export default {
   data() {
     return {
       email: '',
       pwrd: ''
+    }
+  },
+  validations: {
+    email: {
+      required,
+      email
+    },
+    pwrd: {
+      required,
+      minLength: minLength(6)
     }
   },
   methods: {
@@ -49,3 +71,10 @@ export default {
   }
 }
 </script>
+
+<style>
+  .invalidField  {
+    border: 1px solid red;
+    background-color: #ffb3b3;
+  }
+</style>

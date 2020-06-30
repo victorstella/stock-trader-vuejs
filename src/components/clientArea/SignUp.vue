@@ -10,17 +10,23 @@
             <div class="px-3 col-8 col-lg">
               <input 
                 type="text" 
-                class="form-control" 
+                class="form-control"
                 placeholder="First name"
                 v-model="firstName"
-                autofocus>
+                autofocus
+                :class="{invalidField: $v.firstName.$error}"
+                @blur="$v.firstName.$touch()">
+              <small style="color: red" v-if="$v.firstName.$error">Please enter your first name.</small>
             </div>
             <div class="px-3 col-8 col-lg">
               <input 
                 type="text" 
                 class="form-control" 
                 placeholder="Last name"
-                v-model="lastName">
+                v-model="lastName"
+                :class="{invalidField: $v.lastName.$error}"
+                @blur="$v.lastName.$touch()">
+              <small style="color: red" v-if="$v.lastName.$error">Please enter your last name.</small>
             </div>
           </div>
           <br>
@@ -30,7 +36,10 @@
             type="number" 
             class="form-control col-10 col-lg-5" 
             placeholder="ID/Passport/Driver Licence"
-            v-model="usrDoc">
+            v-model="usrDoc"
+            :class="{invalidField: $v.usrDoc.$error}"
+            @blur="$v.usrDoc.$touch()">
+          <small style="color: red" v-if="$v.usrDoc.$error">Please provide a valid document.<br></small>
           <br>
           
           <label for="Email">Email Address</label>
@@ -38,7 +47,10 @@
             type="email" 
             class="form-control col-lg-5" 
             placeholder="user@example.com"
-            v-model="email">
+            v-model="email"
+            :class="{invalidField: $v.email.$error}"
+            @blur="$v.email.$touch()">
+          <small style="color: red" v-if="$v.email.$error">Please provide a valid e-mail address.<br></small>
           <br>
           
           <label for="CreatePassword">Password</label>
@@ -46,7 +58,9 @@
             type="password" 
             class="form-control col-8 col-lg-4"
             placeholder="Create Password"
-            v-model="pwrd">
+            v-model="pwrd"
+            :class="{invalidField: $v.pwrd.$error}"
+            @blur="$v.pwrd.$touch()">
           <small class="form-text text-muted">Your password must be at least 6 digits.</small>
           <br>
           
@@ -54,20 +68,22 @@
             type="password" 
             class="form-control col-8 col-lg-4" 
             placeholder="Confirm Password"
-            v-model="confPwrd">
+            v-model="confPwrd"
+            :class="{invalidField: $v.confPwrd.$error}"
+            @blur="$v.confPwrd.$touch()">
           <br>
           
-          <div class="form-group form-check">
+          <div class="form-group form-check" :class="{invalidLabel: !over18}">
             <input 
               type="checkbox" 
               class="form-check-input"
               v-model="over18">
-            <label class="form-check-label" for="exampleCheck1">I'm over 18 years old.</label>
+            <label class="form-check-label" for="over18">I'm over 18 years old.</label>
           </div>
           <br>
           
           <label for="DepositFunds">Deposit Funds</label>
-          <div class="input-group mb-3">
+          <div class="input-group">
             <div class="input-group-prepend">
               <span class="input-group-text">$</span>
             </div>
@@ -75,19 +91,22 @@
               type="number" 
               class="form-control col-7 col-lg-2" 
               aria-label="Amount (to the nearest dollar)"
-              v-model="funds">
+              v-model="funds"
+              :class="{invalidField: $v.funds.$error}"
+              @blur="$v.funds.$touch()">
             <div class="input-group-append">
               <span class="input-group-text">.00</span>
             </div>
           </div>
+          <small class="form-text text-muted">The minimum value for deposit is $50.</small>
           <br>
           <br>
           
           <button 
             type="submit" 
-            class="btn btn-info btn-block" 
+            class="btn btn-info btn-block mt-3" 
             @click.prevent="joinUs()"
-            :disabled="!over18">Submit</button>
+            :disabled="$v.$error || !over18">Submit</button>
         </form>
       
       </div>
@@ -95,6 +114,8 @@
 </template>
 
 <script>
+import { required, email, minLength, numeric, sameAs, minValue } from 'vuelidate/lib/validators';
+
 export default {
   data() {
     return {
@@ -106,6 +127,38 @@ export default {
       confPwrd: '',
       over18: false,
       funds: ''
+    }
+  },
+  validations: {
+    firstName: {
+      required,
+      minLength: minLength(2)
+    },
+    lastName: {
+      required,
+      minLength: minLength(2)
+    },
+    usrDoc: {
+      required,
+      numeric,
+      minLength: minLength(6)
+    },
+    email: {
+      required,
+      email
+    },
+    pwrd: {
+      required,
+      minLength: minLength(6)
+    },
+    confPwrd: {
+      required,
+      sameAs: sameAs('pwrd')
+    },
+    funds: {
+      required,
+      numeric,
+      minValue: minValue(50)
     }
   },
   methods: {
@@ -123,15 +176,9 @@ export default {
           funds: this.funds        
         }
       };
-      if(formData.pwrd == formData.confPwrd){
-        if(formData.over18) {
-          this.$store.dispatch('signup', formData);
-        } else {
-          alert('Please check if you are over 18 years old.');
-        }
-      } else {
-        alert('Password confirmation does not match.');
-      }
+
+      this.$store.dispatch('signup', formData);
+     
       this.firstName = '';
       this.lastName = '';
       this.usrDoc = null;
@@ -146,6 +193,12 @@ export default {
 </script>
 
 <style>
-  @media only screen and (max-width: 992px){
+  .invalidField {
+    border: 1px solid red;
+    background-color: #ffb3b3;
+  }
+
+  .invalidLabel {
+    color: red;
   }
 </style>

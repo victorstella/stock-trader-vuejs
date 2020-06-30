@@ -12,7 +12,10 @@
             class="form-control col-8 col-lg-4"
             v-if="editing" 
             type="text"
-            v-model="editedData.firstName">
+            v-model="editedData.firstName"
+            :class="{invalidField: $v.editedData.firstName.$error}"
+            @blur="$v.editedData.firstName.$touch()">
+            <small style="color: red" v-if="$v.editedData.firstName.$error">Please enter your first name.<br></small>
           <br>
           
           <label for="Name">Last Name</label>
@@ -23,29 +26,38 @@
             class="form-control col-8 col-lg-4"
             v-if="editing" 
             type="text"
-            v-model="editedData.lastName">
+            v-model="editedData.lastName"
+            :class="{invalidField: $v.editedData.lastName.$error}"
+            @blur="$v.editedData.lastName.$touch()">
+            <small style="color: red" v-if="$v.editedData.lastName.$error">Please enter your last name.<br></small>
           <br>
 
           <label for="Document">Document</label>
           <div v-if="!editing" class="font-weight-bold">
             {{ userData.usrDoc }}
           </div>
-          <input 
+          <input
             class="form-control col-10 col-lg-5"
-            v-if="editing" 
+            v-if="editing"
             type="number"
-            v-model="editedData.usrDoc">
+            v-model="editedData.usrDoc"
+            :class="{invalidField: $v.editedData.usrDoc.$error}"
+            @blur="$v.editedData.usrDoc.$touch()">
+            <small style="color: red" v-if="$v.editedData.usrDoc.$error">Please provide a valid document.<br></small>
           <br>
 
           <label for="Email">Email Address</label>
           <div v-if="!editing" class="font-weight-bold">
             {{ userData.email }}
           </div>
-          <input 
+          <input
             class="form-control col-lg-5"
-            v-if="editing" 
+            v-if="editing"
             type="email"
-            v-model="editedData.email">
+            v-model="editedData.email"
+            :class="{invalidField: $v.editedData.email.$error}"
+            @blur="$v.editedData.email.$touch()">
+            <small style="color: red" v-if="$v.editedData.email.$error">Please provide a valid e-mail address.<br></small>
           <br>
 
           <button
@@ -56,15 +68,27 @@
             data-target="#confirmDeleteAcc">Delete Account
           </button>
 
-          <div 
-            class="modal fade col-12" 
-            id="confirmDeleteAcc" 
-            tabindex="-1" 
-            role="dialog" 
-            aria-labelledby="confirmDeleteAcc" 
+          <button
+            type="submit"
+            class="btn btn-dark btn-block"
+            v-if="!editing"
+            @click.prevent="editUserInfo()">Edit
+          </button>
+
+          <div class="row justify-content-center" v-if="editing">
+            <button class="btn btn-danger mx-3" @click.prevent="editUserInfo()">Cancel</button>
+            <button class="btn btn-success mx-3" :disabled="$v.$invalid" @click.prevent="saveData()">Save</button>
+          </div>
+
+          <div
+            class="modal fade col-12"
+            id="confirmDeleteAcc"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="confirmDeleteAcc"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-              
+
               <div class="modal-content col-11 mx-auto">
                 <div class="modal-header py-2">
                   <h6 class="modal-title mx-2"><strong>Delete Account</strong></h6>
@@ -77,28 +101,16 @@
                 </div>
                 <div class="modal-footer py-2">
                   <button type="button" class="btn btn-danger mx-auto" data-dismiss="modal">No</button>
-                  <button 
-                    type="button" 
-                    class="btn btn-success mx-auto" 
-                    data-dismiss="modal" 
+                  <button
+                    type="button"
+                    class="btn btn-success mx-auto"
+                    data-dismiss="modal"
                     @click.prevent="deleteAcc()">Yes
                   </button>
                 </div>
               </div>
-            
+
             </div>
-          </div>
-
-          <button 
-            type="submit" 
-            class="btn btn-dark btn-block"
-            v-if="!editing"
-            @click.prevent="editUserInfo()">Edit
-          </button>
-
-          <div class="row justify-content-center" v-if="editing">
-            <button class="btn btn-danger mx-3" @click.prevent="editUserInfo()">Cancel</button>
-            <button class="btn btn-success mx-3" @click.prevent="saveData()">Save</button>
           </div>
 
         </form>
@@ -107,6 +119,8 @@
 </template>
 
 <script>
+import { required, minLength, numeric, email } from 'vuelidate/lib/validators';
+
 export default {
   data() {
     return {
@@ -118,6 +132,27 @@ export default {
       },
       editing: false
     }
+  },
+  validations: {
+    editedData: {
+      firstName: {
+        required,
+        minLength: minLength(2)
+      },
+      lastName: {
+        required,
+        minLength: minLength(2)
+      },
+      usrDoc: {
+        required,
+        minLength: minLength(6),
+        numeric
+      },
+      email: {
+        required,
+        email
+      }
+    } 
   },
   computed: {
     userData(){
@@ -151,5 +186,10 @@ export default {
 <style scoped>
   #userData {
     font-size: 18px;
+  }
+
+  .invalidField {
+    border: 1px solid red;
+    background-color: #ffb3b3;
   }
 </style>

@@ -3,7 +3,11 @@
     
     <div class="card bg-dark text-white mb-4">
       <h6 class="card-header">{{ stock.name }} <small>(Price: {{ numberToMoney }})</small>
-      <button type="button" class="close" data-toggle="modal" data-target="#deleteStock">
+      <button type="button" 
+        class="close" 
+        @click.prevent="stockToDelete()" 
+        data-toggle="modal" 
+        data-target="#deleteStock">
         <span aria-hidden="true">&times;</span>
       </button>
       </h6>
@@ -89,8 +93,12 @@ export default {
       this.$store.dispatch('buyStock', order);
       this.quantity = '';
     },
+    stockToDelete() {
+      localStorage.setItem('stockToDelete', this.stock.id);
+    },
     deleteStock() {
-      this.$store.commit('DEL_STOCK', this.stock.id);
+      this.$store.commit('DEL_STOCK', localStorage.getItem('stockToDelete'));
+      localStorage.removeItem('storeToDelete');
     }
   }
 }
