@@ -44,10 +44,10 @@
 
             <div class="modal-body py-2 mx-2">
               <label for="newStockName">Stock Name</label>
-              <input 
-                class="form-control col-lg-7 col-9" 
-                type="text" 
-                placeholder="Name" 
+              <input
+                class="form-control col-lg-7 col-9"
+                type="text"
+                placeholder="Name"
                 v-model="newStockName"
                 :class="{invalidField: $v.newStockName.$error}"
                 @blur="$v.newStockName.$touch()">
@@ -72,9 +72,9 @@
             </div>
 
             <div class="modal-footer py-2">
-              <button 
-                type="button" 
-                class="btn btn-danger" 
+              <button
+                type="button"
+                class="btn btn-danger"
                 data-dismiss="modal"
                 @click="clearNew()">Cancel
               </button>
@@ -88,7 +88,7 @@
             </div>
 
           </div>
-        
+
         </div>
       </div>
 
@@ -97,17 +97,43 @@
 </template>
 
 <script>
-import StockListStock from './Stock.vue';
-import { required, minLength, numeric, minValue } from 'vuelidate/lib/validators';
+import StockListStock from './Stock.vue'
+import { required, minLength, numeric, minValue } from 'vuelidate/lib/validators'
 
 export default {
-  data() {
+  data () {
     return {
-      currentStockListSize: 0,
       newStockName: '',
       newStockPrice: '',
       addStockClass: 'card bg-secondary text-white addStock'
     }
+  },
+  computed: {
+    stockListCompanies () {
+      return this.$store.getters.getStocks
+    }
+  },
+  methods: {
+    addNewStock () {
+      const stockListSize = parseInt(this.$store.getters.getStocks.length)
+      const newStockId = parseInt(this.$store.getters.getStocks[stockListSize - 1].id) + 1
+      const newStockList = this.$store.getters.getStocks
+      newStockList.push({
+        id: newStockId,
+        name: this.newStockName,
+        price: parseInt(this.newStockPrice)
+      })
+      if (newStockList.price) this.$store.commit('CREATE_NEW_STOCK', newStockList)
+      this.newStockName = ''
+      this.newStockPrice = ''
+    },
+    clearNew () {
+      this.newStockName = ''
+      this.newStockPrice = ''
+    }
+  },
+  components: {
+    appStockList: StockListStock
   },
   validations: {
     newStockName: {
@@ -118,37 +144,6 @@ export default {
       required,
       numeric,
       minValue: minValue(1)
-    }
-  },
-  components: {
-    appStockList: StockListStock
-  },
-  computed: {
-    stockListCompanies() {
-      if(this.$store.getters.getStocks) {
-        this.currentStockListSize = parseInt(this.$store.getters.getStocks.length);
-        return this.$store.getters.getStocks;
-      }
-    }
-  },
-  methods: {
-    addNewStock() {
-      let stockListSize = parseInt(this.$store.getters.getStocks.length);
-      let newStockId = parseInt(this.$store.getters.getStocks[stockListSize - 1].id) + 1;
-      let newStockList = this.$store.getters.getStocks;
-      newStockList.push({
-        id: newStockId,
-        name: this.newStockName,
-        price: parseInt(this.newStockPrice)
-      });
-      if(newStockList.price)
-      this.$store.commit('CREATE_NEW_STOCK', newStockList);
-      this.newStockName = '';
-      this.newStockPrice = '';
-    },
-    clearNew() {
-      this.newStockName = '',
-      this.newStockPrice = ''
     }
   }
 }

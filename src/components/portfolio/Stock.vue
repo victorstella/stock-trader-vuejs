@@ -1,8 +1,8 @@
 <template>
   <div class="col-sm-6 col-md-4">
-    
+
     <div class="card bg-dark text-white mb-4">
-      <h6 class="card-header">{{ stock.name }} 
+      <h6 class="card-header">{{ stock.name }}
         <small>Price: {{ numberToMoney }}</small>
         <br>
         <small>Quantity: {{ stock.quantity }}</small>
@@ -21,7 +21,7 @@
         </button>
       </div>
     </div>
-  
+
   </div>
 </template>
 
@@ -29,29 +29,29 @@
 
 export default {
   props: ['stock'],
-  data() {
+  data () {
     return {
       quantity: ''
     }
   },
   computed: {
-    insufficientQuantity() {
-      return this.quantity > parseInt(this.stock.quantity) || this.quantity <= 0;
+    insufficientQuantity () {
+      return this.quantity > parseInt(this.stock.quantity) || this.quantity <= 0
     },
-    numberToMoney() {
-      return this.stock.price.toLocaleString('en-US', {style: 'currency', currency: 'USD'});
+    numberToMoney () {
+      return this.stock.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
     }
   },
   methods: {
-    sellStock() {
-      let order = {
+    sellStock () {
+      const order = {
         id: parseInt(this.stock.id),
         name: this.stock.name,
         price: parseInt(this.stock.price),
         quantity: parseInt(this.quantity)
-      };
-      this.$store.dispatch('sellStock', order);
-      this.quantity = '';
+      }
+      this.$store.dispatch('sellStock', order)
+      this.quantity = ''
     }
   }
 }

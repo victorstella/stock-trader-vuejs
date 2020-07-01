@@ -1,12 +1,12 @@
 <template>
   <div class="col-sm-6 col-md-4">
-    
+
     <div class="card bg-dark text-white mb-4">
       <h6 class="card-header">{{ stock.name }} <small>(Price: {{ numberToMoney }})</small>
-      <button type="button" 
-        class="close" 
-        @click.prevent="stockToDelete()" 
-        data-toggle="modal" 
+      <button type="button"
+        class="close"
+        @click.prevent="stockToDelete()"
+        data-toggle="modal"
         data-target="#deleteStock">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -26,15 +26,15 @@
       </div>
     </div>
 
-    <div 
-      class="modal fade col-12" 
-      id="deleteStock" 
-      tabindex="-1" 
-      role="dialog" 
-      aria-labelledby="deleteStock" 
+    <div
+      class="modal fade col-12"
+      id="deleteStock"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="deleteStock"
       aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
-        
+
         <div class="modal-content col-11 mx-auto">
           <div class="modal-header py-2">
             <h6 class="modal-title mx-2"><strong>Delete Stock</strong></h6>
@@ -48,15 +48,15 @@
           </div>
           <div class="modal-footer py-2">
             <button type="button" class="btn btn-danger mx-auto" data-dismiss="modal">No</button>
-            <button 
-              type="button" 
-              class="btn btn-success mx-auto" 
-              data-dismiss="modal" 
+            <button
+              type="button"
+              class="btn btn-success mx-auto"
+              data-dismiss="modal"
               @click.prevent="deleteStock()">Yes
             </button>
           </div>
         </div>
-      
+
       </div>
     </div>
 
@@ -66,40 +66,38 @@
 <script>
 export default {
   props: ['stock'],
-  data() {
+  data () {
     return {
       quantity: ''
     }
   },
   computed: {
-    insufficientFunds() {
-      let userData = this.$store.getters.getUserServerData;
-      if(userData) {
-        return this.quantity * parseInt(this.stock.price) > parseInt(userData.lastSavedData.funds) || 
-        this.quantity <= 0;
-      }
+    insufficientFunds () {
+      const userData = this.$store.getters.getUserServerData
+      return this.quantity * parseInt(this.stock.price) > parseInt(userData.lastSavedData.funds) ||
+        this.quantity <= 0
     },
-    numberToMoney() {
-      return this.stock.price.toLocaleString('en-US', {style: 'currency', currency: 'USD'});
+    numberToMoney () {
+      return this.stock.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
     }
   },
   methods: {
-    buyStock() {
-      let order = {
+    buyStock () {
+      const order = {
         id: parseInt(this.stock.id),
         name: this.stock.name,
         price: parseInt(this.stock.price),
         quantity: parseInt(this.quantity)
-      };
-      this.$store.dispatch('buyStock', order);
-      this.quantity = '';
+      }
+      this.$store.dispatch('buyStock', order)
+      this.quantity = ''
     },
-    stockToDelete() {
-      localStorage.setItem('stockToDelete', this.stock.id);
+    stockToDelete () {
+      localStorage.setItem('stockToDelete', this.stock.id)
     },
-    deleteStock() {
-      this.$store.commit('DEL_STOCK', localStorage.getItem('stockToDelete'));
-      localStorage.removeItem('storeToDelete');
+    deleteStock () {
+      this.$store.commit('DEL_STOCK', localStorage.getItem('stockToDelete'))
+      localStorage.removeItem('storeToDelete')
     }
   }
 }

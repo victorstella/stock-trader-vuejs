@@ -1,14 +1,14 @@
 <template>
   <div class="col-sm-6 col-md-5 m-auto mx-3">
-    
+
     <div class="card text-center mb-3" style="background-color: lightgrey;">
       <h3 class="card-header">Login</h3>
       <div class="card-body">
         <form>
-          
+
           <label for="Email">Email Address</label>
-          <input 
-            type="email" 
+          <input
+            type="email"
             class="form-control col-lg-9 m-auto"
             :class="{invalidField: $v.email.$error}"
             placeholder="user@example.com"
@@ -18,36 +18,36 @@
           <small style="color: red" v-if="$v.email.$error">Please provide a valid and registered e-mail address.</small>
           <br>
           <br>
-          
+
           <label for="Password">Password</label>
-          <input 
-            type="password" 
+          <input
+            type="password"
             class="form-control col-lg-9 m-auto"
             :class="{invalidField: $v.pwrd.$error}"
             @blur="$v.pwrd.$touch()"
             v-model="pwrd">
           <br>
-          
-          <button 
-            type="submit" 
-            class="btn btn-info" 
+
+          <button
+            type="submit"
+            class="btn btn-info"
             @click.prevent="signin()"
             :disabled="$v.$invalid">Enter
           </button>
-        
+
         </form>
       </div>
     </div>
- 
+
   </div>
 </template>
 
 <script>
-import { required, email, minLength } from 'vuelidate/lib/validators';
-import axios from 'axios';
+import { required, email, minLength } from 'vuelidate/lib/validators'
+import axios from 'axios'
 
 export default {
-  data() {
+  data () {
     return {
       email: '',
       pwrd: ''
@@ -58,12 +58,12 @@ export default {
       required,
       email,
       emailUnregistered: val => {
-        if(val === '') return true;
-        return axios.get('https://vuejs-http-d192f.firebaseio.com/users.json?orderBy="email"&equalTo="'+
+        if (val === '') return true
+        return axios.get('https://vuejs-http-d192f.firebaseio.com/users.json?orderBy="email"&equalTo="' +
           val + '"')
-        .then(response => {
-          return Object.keys(response.data).length === 0 ? false : true;
-        })
+          .then(response => {
+            return Object.keys(response.data).length !== 0
+          })
       }
     },
     pwrd: {
@@ -72,10 +72,10 @@ export default {
     }
   },
   methods: {
-    signin() {
-      this.$store.dispatch('login', { email: this.email, pwrd: this.pwrd });
-      this.email = '';
-      this.pwrd = '';
+    signin () {
+      this.$store.dispatch('login', { email: this.email, pwrd: this.pwrd })
+      this.email = ''
+      this.pwrd = ''
     }
   }
 }

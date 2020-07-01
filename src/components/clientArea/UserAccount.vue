@@ -3,28 +3,28 @@
       <h3 class="card-header text-center">User Account Details</h3>
       <div class="card-body mb-1 mx-3 mx-lg-5">
         <form id="userData">
-          
+
           <label for="Name">First Name</label>
           <div v-if="!editing" class="font-weight-bold">
             {{ userData.firstName }}
           </div>
-          <input 
+          <input
             class="form-control col-8 col-lg-4"
-            v-if="editing" 
+            v-if="editing"
             type="text"
             v-model="editedData.firstName"
             :class="{invalidField: $v.editedData.firstName.$error}"
             @blur="$v.editedData.firstName.$touch()">
             <small style="color: red" v-if="$v.editedData.firstName.$error">Please enter your first name.<br></small>
           <br>
-          
+
           <label for="Name">Last Name</label>
           <div  v-if="!editing" class="font-weight-bold">
             {{ userData.lastName }}
           </div>
-          <input 
+          <input
             class="form-control col-8 col-lg-4"
-            v-if="editing" 
+            v-if="editing"
             type="text"
             v-model="editedData.lastName"
             :class="{invalidField: $v.editedData.lastName.$error}"
@@ -119,10 +119,10 @@
 </template>
 
 <script>
-import { required, minLength, numeric, email } from 'vuelidate/lib/validators';
+import { required, minLength, numeric, email } from 'vuelidate/lib/validators'
 
 export default {
-  data() {
+  data () {
     return {
       editedData: {
         firstName: this.$store.getters.getUserServerData.firstName,
@@ -152,32 +152,30 @@ export default {
         required,
         email
       }
-    } 
+    }
   },
   computed: {
-    userData(){
-      if(this.$store.getters.getUserServerData) {
-        return this.$store.getters.getUserServerData;
-      }
+    userData () {
+      return this.$store.getters.getUserServerData
     }
   },
   methods: {
-    editUserInfo() {
-      this.editing = !this.editing;
-      if(!this.editing) {
-        this.editedData.firstName = this.$store.getters.getUserServerData.firstName;
-        this.editedData.lastName = this.$store.getters.getUserServerData.lastName;
-        this.editedData.usrDoc = this.$store.getters.getUserServerData.usrDoc;
-        this.editedData.email = this.$store.getters.getUserServerData.email;
+    editUserInfo () {
+      this.editing = !this.editing
+      if (!this.editing) {
+        this.editedData.firstName = this.$store.getters.getUserServerData.firstName
+        this.editedData.lastName = this.$store.getters.getUserServerData.lastName
+        this.editedData.usrDoc = this.$store.getters.getUserServerData.usrDoc
+        this.editedData.email = this.$store.getters.getUserServerData.email
       };
     },
-    saveData() {
-      this.$store.dispatch('storeUserAccountModifications', this.editedData);
-      this.editUserInfo();
+    saveData () {
+      this.$store.dispatch('storeUserAccountModifications', this.editedData)
+      this.editUserInfo()
     },
-    deleteAcc() {
-      this.$store.dispatch('deleteAccount');
-      this.$router.push({ name: 'login' });
+    deleteAcc () {
+      this.$store.dispatch('deleteAccount')
+      this.$router.push({ name: 'login' })
     }
   }
 }

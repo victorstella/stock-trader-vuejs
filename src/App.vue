@@ -3,13 +3,13 @@
 
     <app-header></app-header>
     <div class="row m-0">
-      <div id="routerView" class="col-md-11 px-0 pb-2">    
+      <div id="routerView" class="col-md-11 px-0 pb-2">
         <transition name="slide" mode="out-in">
           <router-view id="body"></router-view>
         </transition>
       </div>
     </div>
-  
+
   </div>
 </template>
 
@@ -20,8 +20,8 @@ export default {
   components: {
     'app-header': Header
   },
-  created() {
-    this.$store.dispatch('tryAutoLogin');
+  created () {
+    this.$store.dispatch('tryAutoLogin')
   }
 }
 </script>

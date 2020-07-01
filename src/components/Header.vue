@@ -1,20 +1,20 @@
 <template>
   <nav id="myNav" class="navbar navbar-expand-lg navbar-dark bg-dark navMargin">
-    
+
     <div class="navbar-header">
       <router-link to="/" class="navbar-brand">Stock Trader</router-link>
     </div>
     <div class="collapse navbar-collapse">
-      
+
       <ul v-if="loggedUser" class="navbar-nav mr-auto">
         <router-link to="/portfolio" class="nav-link" activeClass="active"><a>Portfolio</a></router-link>
         <router-link to="/stocks" class="nav-link" activeClass="active"><a>Stocks</a></router-link>
       </ul>
-      
+
       <ul v-if="loggedUser" class="navbar-nav d-flex justify-content-end">
         <li class="nav-item" @click="endDay()"><a class="nav-link" href="#">End Day</a></li>
         <li class="nav-item dropdown">
-          <a 
+          <a
             href="#"
             class="nav-link dropdown-toggle"
             data-toggle="dropdown"
@@ -71,7 +71,7 @@
         data-toggle="collapse"
         data-target="#responsiveMenuToggle"
         aria-controls="responsiveMenuToggle"
-        aria-expanded="false" 
+        aria-expanded="false"
         aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -117,46 +117,44 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions } from 'vuex'
 
 export default {
-  created() {
-    if(window.innerWidth <= 600) {
-      this.smallScreen = true;
+  created () {
+    if (window.innerWidth <= 600) {
+      this.smallScreen = true
     }
   },
-  data() {
+  data () {
     return {
       smallScreen: false
     }
   },
   computed: {
-    displayFunds() {
-      let userData = this.$store.getters.getUserServerData;
-      if(userData) {
-        return parseInt(userData.lastSavedData.funds).toLocaleString('en-US', {style: 'currency', currency: 'USD'});
-      }
+    displayFunds () {
+      const userData = this.$store.getters.getUserServerData ? this.$store.getters.getUserServerData : 0
+      return parseInt(userData.lastSavedData.funds).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
     },
-    loggedUser() {
-      return this.$store.getters.getLoggedUser;
+    loggedUser () {
+      return this.$store.getters.getLoggedUser
     }
   },
   methods: {
     ...mapActions({
       loadServerData: 'loadStockServer',
-      sendServerData: 'sendStockServer',
+      sendServerData: 'sendStockServer'
     }),
-    endDay() {
-      this.$store.commit('RANDOM_STOCKS');
+    endDay () {
+      this.$store.commit('RANDOM_STOCKS')
     },
-    saveData() {
-      this.sendServerData();
+    saveData () {
+      this.sendServerData()
     },
-    loadData() {
-      this.loadServerData();
+    loadData () {
+      this.loadServerData()
     },
-    logout() {
-      this.$store.commit('LOGOUT');
+    logout () {
+      this.$store.commit('LOGOUT')
     }
   }
 }
