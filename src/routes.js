@@ -17,39 +17,39 @@ export default new VueRouter({
     { path: '/', name: 'home', component: Home },
     { path: '/login', name: 'login', component: Login },
     { path: '/signUp', name: 'signup', component: SignUp },
-    { 
+    {
       path: '/userAccount',
       name: 'account',
       component: UserAccount,
-      beforeEnter(to, from, next) {
-        if(store.state.userEmail) {
-          next();
+      beforeEnter (to, from, next) {
+        if (store.state.userEmail) {
+          next()
         } else {
-          next({ name: 'login' });
+          next({ name: 'login' })
         }
       }
     },
-    { 
+    {
       path: '/stocks',
       name: 'stocks',
       component: StockList,
-      beforeEnter(to, from, next) {
-        if(store.state.userEmail) {
-          next();
+      beforeEnter (to, from, next) {
+        if (store.state.userEmail) {
+          next()
         } else {
-          next({ name: 'login' });
+          next({ name: 'login' })
         }
       }
     },
-    { 
+    {
       path: '/portfolio',
       name: 'portfolio',
       component: Portfolio,
-      beforeEnter(to, from, next) {
-        if(store.state.userEmail) {
-          next();
+      beforeEnter (to, from, next) {
+        if (store.state.userEmail) {
+          next()
         } else {
-          next({ name: 'login' });
+          next({ name: 'login' })
         }
       }
     }
