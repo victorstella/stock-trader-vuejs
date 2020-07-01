@@ -1,3 +1,4 @@
+/* eslint-disable vue/return-in-computed-property */
 <template>
   <nav id="myNav" class="navbar navbar-expand-lg navbar-dark bg-dark navMargin">
 
@@ -132,8 +133,10 @@ export default {
   },
   computed: {
     displayFunds () {
-      const userData = this.$store.getters.getUserServerData ? this.$store.getters.getUserServerData : 0
-      return parseInt(userData.lastSavedData.funds).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+      const userData = this.$store.getters.getUserServerData
+      return userData
+        ? parseInt(userData.lastSavedData.funds).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+        : 0
     },
     loggedUser () {
       return this.$store.getters.getLoggedUser
