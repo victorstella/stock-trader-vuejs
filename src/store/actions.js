@@ -88,40 +88,29 @@ const login = ({commit, dispatch}, authData) => {
       localId: firstResponse.data.localId,
       userEmail: authData.email
     });
-    
-    axios.get('https://vuejs-http-d192f.firebaseio.com/users.json?auth=' + firstResponse.data.idToken)
+
+    axios.get('https://vuejs-http-d192f.firebaseio.com/users.json?orderBy="email"&equalTo="'+ 
+      authData.email + '"')
     .then(secondResponse => {
-      
-      for(let user in secondResponse.data) {
-        if(secondResponse.data[user].email == authData.email) {
-          
-          axios.get('https://vuejs-http-d192f.firebaseio.com/users/' + secondResponse.data[user].userServerId + 
-            '.json?auth=' + firstResponse.data.idToken)
-          .then(thirdResponse => {
-            commit('STORE_USER_INFO', thirdResponse.data);
-          })
-          .catch(error => console.log(error));
-          
-          axios.get('https://vuejs-http-d192f.firebaseio.com/stocks.json?auth=' + firstResponse.data.idToken)
-          .then(fourthResponse => {
-            commit('SET_STOCKS', fourthResponse.data);
-          })
-          .catch(error => console.log(error));
-        
-        }
-      };
-
-      const now = new Date();
-      const expirationDate = new Date(now.getTime() + firstResponse.data.expiresIn * 1000);
-      localStorage.setItem('expirationDate', expirationDate);
-      localStorage.setItem('userEmail', authData.email);
-      localStorage.setItem('userPwrd', authData.pwrd);
-      dispatch('logoutTimer', firstResponse.data.expiresIn);
-
-      router.go(-1);
+      let secondResponseArr = Object.values(secondResponse.data);
+      commit('STORE_USER_INFO', secondResponseArr[0]);
     })
-    .catch(error => alert(error));
+    .catch(error => console.log(error));
+    
+    axios.get('https://vuejs-http-d192f.firebaseio.com/stocks.json')
+    .then(thirdResponse => {
+      commit('SET_STOCKS', thirdResponse.data);
+    })
+    .catch(error => console.log(error));
 
+    const now = new Date();
+    const expirationDate = new Date(now.getTime() + firstResponse.data.expiresIn * 1000);
+    localStorage.setItem('expirationDate', expirationDate);
+    localStorage.setItem('userEmail', authData.email);
+    localStorage.setItem('userPwrd', authData.pwrd);
+    dispatch('logoutTimer', firstResponse.data.expiresIn);
+
+    router.replace({ name: 'stocks' });
   })
   .catch(error => console.log(error));
 };
@@ -186,16 +175,15 @@ const storeUserAccountModifications = ({getters, commit}, userModData) => {
 };
 
 const loadStockServer = ({commit, getters}) => {
-  axios.get('https://vuejs-http-d192f.firebaseio.com/users/' + getters.getUserServerData.userServerId + 
-    '.json?auth=' + getters.getIdToken)
-  .then(response => {
-    commit('SET_PORTFOLIO', response.data.lastSavedData);
+  axios.get('https://vuejs-http-d192f.firebaseio.com/users/' + getters.getUserServerData.userServerId + '.json')
+  .then(firstResponse => {
+    commit('SET_PORTFOLIO', firstResponse.data.lastSavedData);
   })
   .catch(error => console.log(error));
 
-  axios.get('https://vuejs-http-d192f.firebaseio.com/stocks.json?auth=' + getters.getIdToken)
-  .then(response => {
-    commit('SET_STOCKS', response.data);
+  axios.get('https://vuejs-http-d192f.firebaseio.com/stocks.json')
+  .then(secondResponse => {
+    commit('SET_STOCKS', secondResponse.data);
   })
   .catch(error => console.log(error));
 };

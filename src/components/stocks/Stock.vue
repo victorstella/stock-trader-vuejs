@@ -75,7 +75,8 @@ export default {
     insufficientFunds() {
       let userData = this.$store.getters.getUserServerData;
       if(userData) {
-        return this.quantity * parseInt(this.stock.price) > parseInt(userData.lastSavedData.funds) || this.quantity <= 0;
+        return this.quantity * parseInt(this.stock.price) > parseInt(userData.lastSavedData.funds) || 
+        this.quantity <= 0;
       }
     },
     numberToMoney() {

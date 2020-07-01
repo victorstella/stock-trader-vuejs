@@ -31,6 +31,17 @@
           </div>
           <br>
           
+          <label for="Email">Email Address</label>
+          <input 
+            type="email" 
+            class="form-control col-lg-5" 
+            placeholder="user@example.com"
+            v-model="email"
+            :class="{invalidField: $v.email.$error}"
+            @blur="$v.email.$touch()">
+          <small style="color: red" v-if="$v.email.$error">Please provide a valid and unregistered e-mail address.<br></small>
+          <br>
+
           <label for="Document">Document</label>
           <input 
             type="number" 
@@ -40,17 +51,6 @@
             :class="{invalidField: $v.usrDoc.$error}"
             @blur="$v.usrDoc.$touch()">
           <small style="color: red" v-if="$v.usrDoc.$error">Please provide a valid document.<br></small>
-          <br>
-          
-          <label for="Email">Email Address</label>
-          <input 
-            type="email" 
-            class="form-control col-lg-5" 
-            placeholder="user@example.com"
-            v-model="email"
-            :class="{invalidField: $v.email.$error}"
-            @blur="$v.email.$touch()">
-          <small style="color: red" v-if="$v.email.$error">Please provide a valid e-mail address.<br></small>
           <br>
           
           <label for="CreatePassword">Password</label>
@@ -115,14 +115,15 @@
 
 <script>
 import { required, email, minLength, numeric, sameAs, minValue } from 'vuelidate/lib/validators';
+import axios from 'axios';
 
 export default {
   data() {
     return {
       firstName: '',
       lastName: '',
-      usrDoc: null,
       email: '',
+      usrDoc: null,
       pwrd: '',
       confPwrd: '',
       over18: false,
@@ -138,14 +139,22 @@ export default {
       required,
       minLength: minLength(2)
     },
+    email: {
+      required,
+      email,
+      emailRegistered: val => {
+        if(val === '') return true;
+        return axios.get('https://vuejs-http-d192f.firebaseio.com/users.json?orderBy="email"&equalTo="'+
+          val + '"')
+        .then(response => {
+          return Object.keys(response.data).length === 0 ? true : false;
+        })
+      }
+    },
     usrDoc: {
       required,
       numeric,
       minLength: minLength(6)
-    },
-    email: {
-      required,
-      email
     },
     pwrd: {
       required,
@@ -167,8 +176,8 @@ export default {
         userServerId: '',
         firstName: this.firstName,
         lastName: this.lastName,
-        usrDoc: this.usrDoc,
         email: this.email,
+        usrDoc: this.usrDoc,
         pwrd: this.pwrd,
         confPwrd: this.confPwrd,
         over18: this.over18,
@@ -181,8 +190,8 @@ export default {
      
       this.firstName = '';
       this.lastName = '';
-      this.usrDoc = null;
       this.email = '';
+      this.usrDoc = null;
       this.pwrd = '';
       this.confPwrd = '';
       this.over18 = false;

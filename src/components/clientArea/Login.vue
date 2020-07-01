@@ -15,7 +15,7 @@
             @blur="$v.email.$touch()"
             v-model="email"
             autofocus>
-          <small style="color: red" v-if="$v.email.$error">Please provide a valid e-mail address.</small>
+          <small style="color: red" v-if="$v.email.$error">Please provide a valid and registered e-mail address.</small>
           <br>
           <br>
           
@@ -44,6 +44,7 @@
 
 <script>
 import { required, email, minLength } from 'vuelidate/lib/validators';
+import axios from 'axios';
 
 export default {
   data() {
@@ -55,7 +56,15 @@ export default {
   validations: {
     email: {
       required,
-      email
+      email,
+      emailUnregistered: val => {
+        if(val === '') return true;
+        return axios.get('https://vuejs-http-d192f.firebaseio.com/users.json?orderBy="email"&equalTo="'+
+          val + '"')
+        .then(response => {
+          return Object.keys(response.data).length === 0 ? false : true;
+        })
+      }
     },
     pwrd: {
       required,
