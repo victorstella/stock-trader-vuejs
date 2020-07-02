@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 <template>
   <div class="card mx-3 mx-lg-5" style="background-color: lightgrey;">
     <label for="StockList"><h3 class="card-header px-4">Stock List</h3></label>
