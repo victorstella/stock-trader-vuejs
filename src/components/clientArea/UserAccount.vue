@@ -60,13 +60,22 @@
             <small style="color: red" v-if="$v.editedData.email.$error">Please provide a valid e-mail address.<br></small>
           <br>
 
-          <button
-            type="button"
-            class="btn btn-danger mb-4"
-            v-if="!editing"
-            data-toggle="modal"
-            data-target="#confirmDeleteAcc">Delete Account
-          </button>
+          <div class="row mb-4 pb-2 px-3">
+            <button
+              type="button"
+              class="btn btn-secondary mr-auto"
+              v-if="!editing"
+              data-toggle="modal"
+              data-target="#changePassword">Change Password
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              v-if="!editing"
+              data-toggle="modal"
+              data-target="#confirmDeleteAcc">Delete Account
+            </button>
+          </div>
 
           <button
             type="submit"
@@ -113,13 +122,69 @@
             </div>
           </div>
 
+          <div
+            class="modal fade col-12"
+            id="changePassword"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="changePassword"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+
+              <div class="modal-content col-11 mx-auto">
+                <div class="modal-header py-2">
+                  <h6 class="modal-title ml-auto"><strong>Change Password</strong></h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+
+                <div class="modal-body py-2 mx-2">
+                  <label for="newPassword">New Password</label>
+                  <input
+                    type="password"
+                    class="form-control col-lg-7 col-9"
+                    v-model="newPwrd"
+                    :class="{ invalidField: $v.newPwrd.$error }"
+                    @blur="$v.newPwrd.$touch()">
+                  <small class="form-text text-muted">Your password must be at least 6 digits.</small>
+                  <br>
+                  <label for="confirmNewPassword">Confirm New Password</label>
+                  <input
+                    type="password"
+                    class="form-control col-lg-7 col-9 mb-2"
+                    v-model="confirmNewPwrd"
+                    :class="{ invalidField: $v.confirmNewPwrd.$error }"
+                    @blur="$v.confirmNewPwrd.$touch()">
+                </div>
+
+                <div class="modal-footer py-2">
+                  <button
+                    type="button"
+                    class="btn btn-danger mx-auto"
+                    data-dismiss="modal"
+                    @click="cancelNewPwrd()">Cancel
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-success mx-auto"
+                    data-dismiss="modal"
+                    :disabled="$v.$invalid"
+                    @click.prevent="changePwrd()">Change
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
         </form>
       </div>
     </div>
 </template>
 
 <script>
-import { required, minLength, numeric, email } from 'vuelidate/lib/validators'
+import { required, minLength, numeric, email, sameAs } from 'vuelidate/lib/validators'
 
 export default {
   data () {
@@ -130,7 +195,9 @@ export default {
         usrDoc: this.$store.getters.getUserServerData.usrDoc,
         email: this.$store.getters.getUserServerData.email
       },
-      editing: false
+      editing: false,
+      newPwrd: '',
+      confirmNewPwrd: ''
     }
   },
   validations: {
@@ -152,11 +219,19 @@ export default {
         required,
         email
       }
+    },
+    newPwrd: {
+      required,
+      minLength: minLength(6)
+    },
+    confirmNewPwrd: {
+      required,
+      sameAs: sameAs('newPwrd')
     }
   },
   computed: {
     userData () {
-      return this.$store.getters.getUserServerData
+      return this.$store.getters.getUserServerData ? this.$store.getters.getUserServerData : {}
     }
   },
   methods: {
@@ -176,6 +251,15 @@ export default {
     deleteAcc () {
       this.$store.dispatch('deleteAccount')
       this.$router.push({ name: 'login' })
+    },
+    changePwrd () {
+      this.$store.dispatch('changePassword', this.confirmNewPwrd)
+      this.newPwrd = ''
+      this.confirmNewPwrd = ''
+    },
+    cancelNewPwrd () {
+      this.newPwrd = ''
+      this.confirmNewPwrd = ''
     }
   }
 }

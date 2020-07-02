@@ -36,10 +36,10 @@ const RANDOM_STOCKS = (state) => {
       state.stocks.forEach(stocksElement => {
         if (portfolioElement.id === stocksElement.id) {
           portfolioElement.price = stocksElement.price
-        };
+        }
       })
     })
-  };
+  }
 }
 
 const BUY_STOCK = (state, userBuyOrder) => {
@@ -49,7 +49,7 @@ const BUY_STOCK = (state, userBuyOrder) => {
     state.myPortfolio[inPortfolioStock].quantity += userBuyOrder.quantity
   } else {
     state.myPortfolio.push(userBuyOrder)
-  };
+  }
   state.userServerData.lastSavedData.funds -= userBuyOrder.quantity * userBuyOrder.price
 }
 
@@ -86,7 +86,7 @@ const STORE_USER_INFO = (state, userInfo) => {
   state.userServerData = userInfo
   if (userInfo.lastSavedData.stockPortfolio) {
     state.myPortfolio = Object.values(userInfo.lastSavedData.stockPortfolio)
-  };
+  }
   if (userInfo.email !== state.userEmail) {
     state.userEmail = userInfo.email
   }
@@ -100,6 +100,12 @@ const STORE_USER_MODIFICATIONS = (state, newAccData) => {
   state.userEmail = newAccData.email
 }
 
+const CHANGE_PASSWORD = (state, newData) => {
+  state.idToken = newData.newIdToken
+  state.userServerData.pwrd = newData.newPassword
+  state.userServerData.confPwrd = newData.newPassword
+}
+
 export default {
   SET_STOCKS,
   CREATE_NEW_STOCK,
@@ -111,5 +117,6 @@ export default {
   AUTH_USER,
   LOGOUT,
   STORE_USER_INFO,
-  STORE_USER_MODIFICATIONS
+  STORE_USER_MODIFICATIONS,
+  CHANGE_PASSWORD
 }

@@ -28,7 +28,7 @@ const signup = ({ commit, dispatch }, authData) => {
         .then(secondResponse => {
           commit('SET_STOCKS', secondResponse.data)
         })
-        .catch(error => console.log(error))
+        .catch(error => alert(error))
 
       const now = new Date()
       const expirationDate = new Date(now.getTime() + firstResponse.data.expiresIn * 1000)
@@ -45,16 +45,16 @@ const signup = ({ commit, dispatch }, authData) => {
 const deleteAccount = ({ commit, getters }) => {
   axios.post('https://identitytoolkit.googleapis.com/v1/accounts:delete?' +
     'key=AIzaSyADgubmeI4xoGzlA0ZNBoHYl8KTB36bcZg', { idToken: getters.getIdToken })
-    .catch(error => console.log(error))
+    .catch(error => alert(error))
 
   axios.delete('https://vuejs-http-d192f.firebaseio.com/users/' + getters.getUserServerData.userServerId +
     '.json?auth=' + getters.getIdToken)
     .then(response => {
       if (!response.data) {
         commit('LOGOUT')
-      };
+      }
     })
-    .catch(error => console.log(error))
+    .catch(error => alert(error))
 }
 
 const tryAutoLogin = ({ dispatch }) => {
@@ -62,12 +62,12 @@ const tryAutoLogin = ({ dispatch }) => {
   const userPwrd = localStorage.getItem('userPwrd')
   if (!userEmail || !userPwrd) {
     return
-  };
+  }
   const expirationDate = localStorage.getItem('expirationDate')
   const now = new Date()
   if (now >= expirationDate) {
     return
-  };
+  }
   dispatch('login', {
     email: userEmail,
     pwrd: userPwrd
@@ -94,13 +94,13 @@ const login = ({ commit, dispatch }, authData) => {
           const secondResponseArr = Object.values(secondResponse.data)
           commit('STORE_USER_INFO', secondResponseArr[0])
         })
-        .catch(error => console.log(error))
+        .catch(error => alert(error))
 
       axios.get('https://vuejs-http-d192f.firebaseio.com/stocks.json')
         .then(thirdResponse => {
           commit('SET_STOCKS', thirdResponse.data)
         })
-        .catch(error => console.log(error))
+        .catch(error => alert(error))
 
       const now = new Date()
       const expirationDate = new Date(now.getTime() + firstResponse.data.expiresIn * 1000)
@@ -111,7 +111,7 @@ const login = ({ commit, dispatch }, authData) => {
 
       router.replace({ name: 'stocks' })
     })
-    .catch(error => console.log(error))
+    .catch(error => alert(error))
 }
 
 const logoutTimer = ({ commit }, expirationTime) => {
@@ -132,7 +132,7 @@ const storeUser = ({ getters, commit }, userData) => {
         axios.patch('https://vuejs-http-d192f.firebaseio.com/users/' + response.data.name +
         '.json?auth=' + getters.getIdToken, { userServerId: response.data.name })
       })
-      .catch(error => console.log(error))
+      .catch(error => alert(error))
   }
 }
 
@@ -147,7 +147,7 @@ const storeUserAccountModifications = ({ getters, commit }, userModData) => {
 
   axios.patch('https://vuejs-http-d192f.firebaseio.com/users/' + getters.getUserServerData.userServerId +
     '.json?auth=' + getters.getIdToken, userData)
-    .catch(error => console.log(error))
+    .catch(error => alert(error))
   if (emailChanged) {
     axios.post('https://identitytoolkit.googleapis.com/v1/accounts:update?' +
       'key=AIzaSyADgubmeI4xoGzlA0ZNBoHYl8KTB36bcZg', {
@@ -162,9 +162,31 @@ const storeUserAccountModifications = ({ getters, commit }, userModData) => {
           userEmail: response.data.email
         })
       })
-      .catch(error => console.log(error))
+      .catch(error => alert(error))
   }
   commit('STORE_USER_MODIFICATIONS', userData)
+}
+
+const changePassword = ({ commit, getters }, newPwrd) => {
+  axios.post('https://identitytoolkit.googleapis.com/v1/accounts:update?' +
+    'key=AIzaSyADgubmeI4xoGzlA0ZNBoHYl8KTB36bcZg', {
+    idToken: getters.getIdToken,
+    password: newPwrd,
+    returnSecureToken: true
+  })
+    .then(firstResponse => {
+      commit('CHANGE_PASSWORD', {
+        newPassword: newPwrd,
+        newIdToken: firstResponse.data.idToken
+      })
+    })
+  axios.patch('https://vuejs-http-d192f.firebaseio.com/users/' + getters.getUserServerData.userServerId +
+    '.json?auth=' + getters.getIdToken, {
+    pwrd: newPwrd,
+    confPwrd: newPwrd
+  })
+    .catch(error => alert(error))
+  localStorage.setItem('userPwrd', newPwrd)
 }
 
 const loadStockServer = ({ commit, getters }) => {
@@ -172,13 +194,13 @@ const loadStockServer = ({ commit, getters }) => {
     .then(firstResponse => {
       commit('SET_PORTFOLIO', firstResponse.data.lastSavedData)
     })
-    .catch(error => console.log(error))
+    .catch(error => alert(error))
 
   axios.get('https://vuejs-http-d192f.firebaseio.com/stocks.json')
     .then(secondResponse => {
       commit('SET_STOCKS', secondResponse.data)
     })
-    .catch(error => console.log(error))
+    .catch(error => alert(error))
 }
 
 const sendStockServer = ({ getters }) => {
@@ -189,11 +211,11 @@ const sendStockServer = ({ getters }) => {
 
   axios.patch('https://vuejs-http-d192f.firebaseio.com/users/' + getters.getUserServerData.userServerId +
     '.json?auth=' + getters.getIdToken, { lastSavedData: lastSavedData })
-    .catch(error => console.log(error))
+    .catch(error => alert(error))
 
   axios.patch('https://vuejs-http-d192f.firebaseio.com/.json?auth=' + getters.getIdToken,
     { stocks: getters.getStocks })
-    .catch(error => console.log(error))
+    .catch(error => alert(error))
 }
 
 export default {
@@ -206,6 +228,7 @@ export default {
   logoutTimer,
   storeUser,
   storeUserAccountModifications,
+  changePassword,
   loadStockServer,
   sendStockServer
 }

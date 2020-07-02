@@ -62,7 +62,7 @@
     <div class="ml-auto">
       <strong
         v-if="loggedUser && smallScreen"
-        class="navbar-text">Funds: {{ displayFunds }}
+        class="navbar-text mr-2">Funds: {{ displayFunds }}
       </strong>
 
       <button

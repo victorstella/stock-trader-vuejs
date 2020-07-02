@@ -49,7 +49,7 @@
                 type="text"
                 placeholder="Name"
                 v-model="newStockName"
-                :class="{invalidField: $v.newStockName.$error}"
+                :class="{ invalidField: $v.newStockName.$error }"
                 @blur="$v.newStockName.$touch()">
               <small style="color: red" v-if="$v.newStockName.$error">Please enter the new stock name.<br></small>
               <br>
@@ -63,7 +63,7 @@
                   class="form-control col-lg-5 col-6"
                   aria-label="Amount (to the nearest dollar)"
                   v-model="newStockPrice"
-                  :class="{invalidField: $v.newStockPrice.$error}"
+                  :class="{ invalidField: $v.newStockPrice.$error }"
                   @blur="$v.newStockPrice.$touch()">
                 <div class="input-group-append">
                   <span class="input-group-text">.00</span>
