@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 <template>
   <div class="card mx-3 mx-lg-5" style="background-color: lightgrey;">
     <label for="StockList"><h3 class="card-header px-4">Stock List</h3></label>
@@ -126,6 +127,8 @@ export default {
       if (newStockList.price) this.$store.commit('CREATE_NEW_STOCK', newStockList)
       this.newStockName = ''
       this.newStockPrice = ''
+      // eslint-disable-next-line no-undef
+      $('#addNewStock').modal('hide')
     },
     clearNew () {
       this.newStockName = ''

@@ -111,7 +111,6 @@ const login = ({ commit, dispatch }, authData) => {
 
       router.replace({ name: 'stocks' })
     })
-    .catch(error => alert(error))
 }
 
 const logoutTimer = ({ commit }, expirationTime) => {

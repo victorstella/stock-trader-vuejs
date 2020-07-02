@@ -256,6 +256,8 @@ export default {
       this.$store.dispatch('changePassword', this.confirmNewPwrd)
       this.newPwrd = ''
       this.confirmNewPwrd = ''
+      // eslint-disable-next-line no-undef
+      $('#changePassword').modal('hide')
     },
     cancelNewPwrd () {
       this.newPwrd = ''
