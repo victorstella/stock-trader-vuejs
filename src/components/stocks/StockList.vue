@@ -151,7 +151,7 @@ export default {
 
 <style>
   .addStock {
-    height: 129px;
+    height: 121px;
   }
 
   .invalidField {
