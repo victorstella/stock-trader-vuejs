@@ -98,10 +98,10 @@
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
 
-              <div class="modal-content col-11 mx-auto">
-                <div class="modal-header py-2">
-                  <h6 class="modal-title mx-2"><strong>Delete Account</strong></h6>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <div class="modal-content col-11 col-lg-9 mx-auto">
+                <div class="modal-header py-1">
+                  <h6 class="modal-title mx-2 py-1"><strong>Delete Account</strong></h6>
+                  <button type="button" class="close py-1 my-0" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
@@ -131,10 +131,10 @@
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
 
-              <div class="modal-content col-11 mx-auto">
-                <div class="modal-header py-2">
-                  <h6 class="modal-title ml-auto"><strong>Change Password</strong></h6>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <div class="modal-content col-11 col-lg-9 mx-auto">
+                <div class="modal-header py-1">
+                  <h6 class="modal-title mx-2 py-1"><strong>Change Password</strong></h6>
+                  <button type="button" class="close py-1 my-0" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
@@ -143,7 +143,7 @@
                   <label for="newPassword">New Password</label>
                   <input
                     type="password"
-                    class="form-control col-lg-7 col-9"
+                    class="form-control col-lg-8 col-9"
                     v-model="newPwrd"
                     :class="{ invalidField: $v.newPwrd.$error }"
                     @blur="$v.newPwrd.$touch()">
@@ -152,7 +152,7 @@
                   <label for="confirmNewPassword">Confirm New Password</label>
                   <input
                     type="password"
-                    class="form-control col-lg-7 col-9 mb-2"
+                    class="form-control col-lg-8 col-9 mb-2"
                     v-model="confirmNewPwrd"
                     :class="{ invalidField: $v.confirmNewPwrd.$error }"
                     @blur="$v.confirmNewPwrd.$touch()">
@@ -161,16 +161,16 @@
                 <div class="modal-footer py-2">
                   <button
                     type="button"
-                    class="btn btn-danger mx-auto"
+                    class="btn btn-danger"
                     data-dismiss="modal"
                     @click="cancelNewPwrd()">Cancel
                   </button>
                   <button
                     type="button"
-                    class="btn btn-success mx-auto"
+                    class="btn btn-success mx-2"
                     data-dismiss="modal"
                     :disabled="$v.$invalid"
-                    @click.prevent="changePwrd()">Change
+                    @click.prevent="changePwrd()">Save
                   </button>
                 </div>
               </div>

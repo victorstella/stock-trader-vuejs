@@ -34,10 +34,10 @@
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
 
-          <div class="modal-content col-11 mx-auto">
-            <div class="modal-header py-2">
-              <h6 class="modal-title mx-2"><strong>New Stock</strong></h6>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <div class="modal-content col-11 col-lg-9 mx-auto">
+            <div class="modal-header py-1">
+              <h6 class="modal-title mx-2 py-1"><strong>New Stock</strong></h6>
+              <button type="button" class="close py-1 my-0" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
@@ -45,7 +45,7 @@
             <div class="modal-body py-2 mx-2">
               <label for="newStockName">Stock Name</label>
               <input
-                class="form-control col-lg-7 col-9"
+                class="form-control col-lg-8 col-9"
                 type="text"
                 placeholder="Name"
                 v-model="newStockName"
@@ -60,7 +60,7 @@
                 </div>
                 <input
                   type="number"
-                  class="form-control col-lg-5 col-6"
+                  class="form-control col-lg-6 col-6"
                   aria-label="Amount (to the nearest dollar)"
                   v-model="newStockPrice"
                   :class="{ invalidField: $v.newStockPrice.$error }"

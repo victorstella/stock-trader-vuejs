@@ -2,14 +2,15 @@
   <div class="col-sm-6 col-md-4">
 
     <div class="card bg-dark text-white mb-4">
-      <h6 class="card-header">{{ stock.name }} <small>(Price: {{ numberToMoney }})</small>
-      <button type="button"
-        class="close"
-        @click.prevent="stockToDelete()"
-        data-toggle="modal"
-        data-target="#deleteStock">
-        <span aria-hidden="true">&times;</span>
-      </button>
+      <h6 class="card-header d-flex align-items-center px-3 py-1">{{ stock.name }}
+        <small>(Price: {{ numberToMoney }})</small>
+        <button type="button"
+          class="close px-2 py-1 ml-auto"
+          @click.prevent="stockToDelete()"
+          data-toggle="modal"
+          data-target="#deleteStock">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </h6>
       <div class="card-body row">
         <input
@@ -35,10 +36,10 @@
       aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
 
-        <div class="modal-content col-11 mx-auto">
-          <div class="modal-header py-2">
-            <h6 class="modal-title mx-2"><strong>Delete Stock</strong></h6>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <div class="modal-content col-11 col-lg-9 mx-auto">
+          <div class="modal-header py-1">
+            <h6 class="modal-title mx-2 py-1"><strong>Delete Stock</strong></h6>
+            <button type="button" class="close py-1 my-0" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -74,8 +75,9 @@ export default {
   computed: {
     insufficientFunds () {
       const userData = this.$store.getters.getUserServerData
-      return this.quantity * parseInt(this.stock.price) > parseInt(userData.lastSavedData.funds) ||
-        this.quantity <= 0
+      return userData
+        ? this.quantity * parseInt(this.stock.price) > parseInt(userData.lastSavedData.funds) || this.quantity <= 0
+        : 0
     },
     numberToMoney () {
       return this.stock.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' })

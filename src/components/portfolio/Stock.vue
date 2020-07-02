@@ -39,7 +39,8 @@ export default {
       return this.quantity > parseInt(this.stock.quantity) || this.quantity <= 0
     },
     numberToMoney () {
-      return this.stock.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+      const stock = this.$store.getters.getStocks.find(element => element.name === this.stock.name)
+      return stock.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
     }
   },
   methods: {
