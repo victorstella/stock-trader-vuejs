@@ -28,7 +28,6 @@ const signup = ({ commit, dispatch }, authData) => {
         .then(secondResponse => {
           commit('SET_STOCKS', secondResponse.data)
         })
-        .catch(error => alert(error))
 
       const now = new Date()
       const expirationDate = new Date(now.getTime() + firstResponse.data.expiresIn * 1000)
@@ -94,13 +93,11 @@ const login = ({ commit, dispatch }, authData) => {
           const secondResponseArr = Object.values(secondResponse.data)
           commit('STORE_USER_INFO', secondResponseArr[0])
         })
-        .catch(error => alert(error))
 
       axios.get('https://vuejs-http-d192f.firebaseio.com/stocks.json')
         .then(thirdResponse => {
           commit('SET_STOCKS', thirdResponse.data)
         })
-        .catch(error => alert(error))
 
       const now = new Date()
       const expirationDate = new Date(now.getTime() + firstResponse.data.expiresIn * 1000)
