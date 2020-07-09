@@ -1,4 +1,5 @@
 # stock-trader-vuejs
+https://stocktrader-vuejs.netlify.app/
 
 ## Project setup
 ```
