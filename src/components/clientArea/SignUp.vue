@@ -75,6 +75,7 @@
 
           <div class="form-group form-check" :class="{invalidLabel: !over18}">
             <input
+              id="over18"
               type="checkbox"
               class="form-check-input"
               v-model="over18">
@@ -106,7 +107,7 @@
             type="submit"
             class="btn btn-info btn-block mt-3"
             @click.prevent="joinUs()"
-            :disabled="$v.$error || !over18">Submit</button>
+            :disabled="!over18 || $v.$anyError">Submit</button>
         </form>
 
       </div>
