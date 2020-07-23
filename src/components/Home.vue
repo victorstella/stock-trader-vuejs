@@ -24,8 +24,10 @@
       </p>
       <p>Any trade, loss or profit achieved here it is not real.</p>
       <p>Your personal data is not verified and can be false without any problem. Obviously, none of
-        this information will be used for any purpose. Your data will be stored in the Firebase database just for
-        the application to work, but can be permanently deleted at any time.
+        this information will be used for any purpose. Your data will be stored in the
+        <a href="https://firebase.google.com/" target="_blank">Firebase</a>
+        database and managed by its Auth REST API, just for the application to work. The account can be
+        permanently deleted at any time.
       </p>
     </h6>
 

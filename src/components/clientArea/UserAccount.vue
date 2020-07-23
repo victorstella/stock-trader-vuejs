@@ -86,7 +86,7 @@
 
           <div class="row justify-content-center" v-if="editing">
             <button class="btn btn-danger mx-3" @click.prevent="editUserInfo()">Cancel</button>
-            <button class="btn btn-success mx-3" :disabled="$v.$invalid" @click.prevent="saveData()">Save</button>
+            <button class="btn btn-success mx-3" :disabled="$v.editedData.$error" @click.prevent="saveData()">Save</button>
           </div>
 
           <div
