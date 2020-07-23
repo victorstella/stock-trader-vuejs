@@ -29,6 +29,14 @@
         database and managed by its Auth REST API, just for the application to work. The account can be
         permanently deleted at any time.
       </p>
+      <hr>
+      <p class="text-center">
+        <strong>
+          For more information, visit the
+          <a href="https://github.com/victorstella/stock-trader-vuejs" target="_blank">Stock Trader</a>
+          root directory.
+        </strong>
+      </p>
     </h6>
 
   </div>
