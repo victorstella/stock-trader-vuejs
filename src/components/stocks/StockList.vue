@@ -81,7 +81,6 @@
               <button
                 type="button"
                 class="btn btn-success mx-2"
-                data-dismiss="modal"
                 :disabled="$v.$invalid"
                 @click="addNewStock()">Save
               </button>
