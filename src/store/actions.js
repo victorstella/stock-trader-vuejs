@@ -1,5 +1,7 @@
 import axios from 'axios'
 import router from '../router/routes.js'
+import * as firebase from 'firebase/app'
+import * as firebaseAuth from 'firebase/auth'
 
 const buyStock = ({ commit }, order) => {
   commit('BUY_STOCK', order)
@@ -9,36 +11,53 @@ const sellStock = ({ commit }, order) => {
   commit('SELL_STOCK', order)
 }
 
-const signup = ({ commit, dispatch }, authData) => {
-  axios.post('https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?' +
-    'key=AIzaSyADgubmeI4xoGzlA0ZNBoHYl8KTB36bcZg', {
-    email: authData.email,
-    password: authData.pwrd,
-    returnSecureToken: true
-  })
-    .then(firstResponse => {
-      commit('AUTH_USER', {
-        idToken: firstResponse.data.idToken,
-        localId: firstResponse.data.localId,
-        userEmail: authData.email
+const signup = async ({ commit, dispatch }, authData) => {
+  const firebaseConfig = {
+    apiKey: 'AIzaSyADgubmeI4xoGzlA0ZNBoHYl8KTB36bcZg',
+    authDomain: 'vuejs-http-d192f.firebaseapp.com',
+    projectId: 'my-stock-trader',
+    storageBucket: 'vuejs-http-d192f.firebaseio.com/'
+  }
+
+  try {
+    const app = firebase.initializeApp(firebaseConfig)
+    const auth = firebaseAuth.getAuth(app)
+    await firebaseAuth.createUserWithEmailAndPassword(auth, authData.email, authData.pwrd)
+      .then(async firstResponse => {
+        if (firstResponse) {
+          const credential = firebaseAuth.EmailAuthProvider.credential(authData.email, authData.pwrd)
+          await firebaseAuth.linkWithCredential(credential)
+            .then(usercred => {
+              console.log(usercred)
+            }).catch(error => alert(error))
+
+          commit('AUTH_USER', {
+            idToken: firstResponse.user.uid,
+            userEmail: firstResponse.user.email
+          })
+          dispatch('storeUser', authData)
+
+          await axios({
+            url: 'https://vuejs-http-d192f.firebaseio.com/stocks.json?',
+            method: 'GET',
+            headers: {
+              authorization: 'Bearer ' + firstResponse.user.uid
+            }
+          })
+
+          // axios.get('https://vuejs-http-d192f.firebaseio.com/stocks.json?auth=' + firstResponse.user.uid)
+            .then(secondResponse => {
+              commit('SET_STOCKS', secondResponse.data)
+            })
+          localStorage.setItem('userEmail', authData.email)
+          localStorage.setItem('userPwrd', authData.pwrd)
+
+          router.replace({ name: 'stocks' })
+        }
       })
-      dispatch('storeUser', authData)
-
-      axios.get('https://vuejs-http-d192f.firebaseio.com/stocks.json?auth=' + firstResponse.data.idToken)
-        .then(secondResponse => {
-          commit('SET_STOCKS', secondResponse.data)
-        })
-
-      const now = new Date()
-      const expirationDate = new Date(now.getTime() + firstResponse.data.expiresIn * 1000)
-      localStorage.setItem('expirationDate', expirationDate)
-      localStorage.setItem('userEmail', authData.email)
-      localStorage.setItem('userPwrd', authData.pwrd)
-      dispatch('logoutTimer', firstResponse.data.expiresIn)
-
-      router.replace({ name: 'stocks' })
-    })
-    .catch(error => alert(error))
+  } catch (error) {
+    alert(error)
+  }
 }
 
 const deleteAccount = ({ commit, getters }) => {
@@ -83,7 +102,7 @@ const login = ({ commit, dispatch }, authData) => {
     .then(firstResponse => {
       commit('AUTH_USER', {
         idToken: firstResponse.data.idToken,
-        localId: firstResponse.data.localId,
+        // localId: firstResponse.data.localId,
         userEmail: authData.email
       })
 
@@ -104,18 +123,18 @@ const login = ({ commit, dispatch }, authData) => {
       localStorage.setItem('expirationDate', expirationDate)
       localStorage.setItem('userEmail', authData.email)
       localStorage.setItem('userPwrd', authData.pwrd)
-      dispatch('logoutTimer', firstResponse.data.expiresIn)
+      // dispatch('logoutTimer', firstResponse.data.expiresIn)
 
       router.replace({ name: 'stocks' })
     })
 }
 
-const logoutTimer = ({ commit }, expirationTime) => {
-  setTimeout(() => {
-    commit('LOGOUT')
-    router.replace({ name: 'login' })
-  }, expirationTime * 1000)
-}
+// const logoutTimer = ({ commit }, expirationTime) => {
+//   setTimeout(() => {
+//     commit('LOGOUT')
+//     router.replace({ name: 'login' })
+//   }, expirationTime * 1000)
+// }
 
 const storeUser = ({ getters, commit }, userData) => {
   if (getters.getIdToken) {
@@ -154,7 +173,7 @@ const storeUserAccountModifications = ({ getters, commit }, userModData) => {
       .then(response => {
         commit('AUTH_USER', {
           idToken: response.data.idToken,
-          localId: response.data.localId,
+          // localId: response.data.localId,
           userEmail: response.data.email
         })
       })
@@ -221,7 +240,7 @@ export default {
   deleteAccount,
   tryAutoLogin,
   login,
-  logoutTimer,
+  // logoutTimer,
   storeUser,
   storeUserAccountModifications,
   changePassword,

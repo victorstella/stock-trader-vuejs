@@ -44,7 +44,6 @@
 
 <script>
 import { required, email, minLength } from 'vuelidate/lib/validators'
-import axios from 'axios'
 
 export default {
   data () {
@@ -57,14 +56,7 @@ export default {
     email: {
       required,
       email,
-      emailUnregistered: val => {
-        if (val === '') return true
-        return axios.get('https://vuejs-http-d192f.firebaseio.com/users.json?orderBy="email"&equalTo="' +
-          val + '"')
-          .then(response => {
-            return Object.keys(response.data).length !== 0
-          })
-      }
+      minLength: minLength(6)
     },
     pwrd: {
       required,

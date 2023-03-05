@@ -66,7 +66,6 @@ const SELL_STOCK = (state, userSellOrder) => {
 
 const AUTH_USER = (state, userData) => {
   state.idToken = userData.idToken
-  state.localId = userData.localId
   state.userEmail = userData.userEmail
 }
 

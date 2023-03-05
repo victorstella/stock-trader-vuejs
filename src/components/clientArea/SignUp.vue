@@ -39,7 +39,7 @@
             v-model="email"
             :class="{invalidField: $v.email.$error}"
             @blur="$v.email.$touch()">
-          <small style="color: red" v-if="$v.email.$error">Please provide a valid and unregistered e-mail address.<br></small>
+          <small style="color: red" v-if="$v.email.$error">Please provide a valid e-mail address.<br></small>
           <br>
 
           <label for="Document">Document</label>
@@ -116,7 +116,6 @@
 
 <script>
 import { required, email, minLength, numeric, sameAs, minValue } from 'vuelidate/lib/validators'
-import axios from 'axios'
 
 export default {
   data () {
@@ -128,7 +127,7 @@ export default {
       pwrd: '',
       confPwrd: '',
       over18: false,
-      funds: ''
+      funds: null
     }
   },
   validations: {
@@ -143,14 +142,7 @@ export default {
     email: {
       required,
       email,
-      emailRegistered: val => {
-        if (val === '') return true
-        return axios.get('https://vuejs-http-d192f.firebaseio.com/users.json?orderBy="email"&equalTo="' +
-          val + '"')
-          .then(response => {
-            return Object.keys(response.data).length === 0
-          })
-      }
+      minLength: minLength(6)
     },
     usrDoc: {
       required,
@@ -171,6 +163,16 @@ export default {
       minValue: minValue(50)
     }
   },
+  mounted () {
+    this.firstName = ''
+    this.lastName = ''
+    this.email = ''
+    this.usrDoc = null
+    this.pwrd = ''
+    this.confPwrd = ''
+    this.over18 = false
+    this.funds = null
+  },
   methods: {
     joinUs () {
       const formData = {
@@ -188,15 +190,6 @@ export default {
       }
 
       this.$store.dispatch('signup', formData)
-
-      this.firstName = ''
-      this.lastName = ''
-      this.email = ''
-      this.usrDoc = null
-      this.pwrd = ''
-      this.confPwrd = ''
-      this.over18 = false
-      this.funds = ''
     }
   }
 }
